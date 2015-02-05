@@ -1,8 +1,0 @@
-insert into usertoolbar (userid,usermodule,orderby,imageurl,commandname,hoverurl,labeltext)
- select 'default',U.usermodule,U.maxorderby+1,'../images/workorder/wo_search_32.png','savequery','../images/workorder/wo_search_32_over.png','Save Query' from 
- (select usermodule, max(orderby) as maxorderby from usertoolbar where userid='default' and usermodule not in ('scheduling','workorder','Admin') and usermodule not like '%panel%' group by usermodule ) U
-
-
-
-delete usertoolbar
-where usermodule = 'storeroompanel' and commandname = 'postcard'
