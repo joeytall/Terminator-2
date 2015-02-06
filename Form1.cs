@@ -19,6 +19,8 @@ namespace Terminator
     {
         private bool newReplace = false;
         private bool expanded = false;
+        private string FileName = "";
+        private SqlConnection conn = null;
                 
         public Terminator()
         {
@@ -405,14 +407,19 @@ namespace Terminator
         private void expand_Click(object sender, EventArgs e)
         {
             expanded = !expanded;
-            int width = expanded ? 1212 : 872;
-            this.ClientSize = new System.Drawing.Size(width, 450);
+            int width = expanded ? 814 : 1145;
+            this.ClientSize = new System.Drawing.Size(width, 542);
             btnExpand.Text = expanded ? "<-" : "->";
         }
 
         private void InitSqlConnection()
         {
-            OleDbConnection conn = new OleDbConnection("Data Source=AZDEV1;Initial Catalog=azzier;Persist Security Info=True;User ID=wwdba; Pwd=sysadmin; Provider=System.Data.SqlClient");
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+            builder.DataSource = "AZDEV1";
+            builder["User Id"] = "wwdba";
+            builder["Password"] = "sysadmin";
+            builder["initial catalog"] = "azzier";
+            conn = new SqlConnection(builder.ConnectionString);
             try
             {
                 conn.Open();
@@ -425,19 +432,79 @@ namespace Terminator
 
         private void populateGridWithMessage(string fileName)
         {
-            OleDbConnection conn = new OleDbConnection("Data Source=AZDEV1;Initial Catalog=azzier;Persist Security Info=True;User ID=wwdba; Pwd=sysadmin; Provider=System.Data.SqlClient");
-            conn.Open();
-            string sql = "SELECT MsgId, MessageDesc FROM systemmessage WHERE FILENAME = '" + fileName + "'";
-            OleDbCommand cmd = conn.CreateCommand();
-            OleDbDataAdapter da = new OleDbDataAdapter(sql, conn);
+            FileName = fileName.Replace("\\", "/");
+            string sql = "SELECT MsgId, MessageDesc FROM systemmessage WHERE FILENAME = '" + FileName + "'";
+            SqlDataAdapter da = new SqlDataAdapter(sql, conn);
             DataTable dt = new DataTable();
             da.Fill(dt);
             da.Dispose();
             dataGrid.DataSource = dt;
+            dataGrid.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             if ( expanded == false)
             {
                 expanded = true;
-                expand_Click(null, null);
+                this.ClientSize = new System.Drawing.Size(1145, 542);
+                btnExpand.Text = expanded ? "<-" : "->";
+            }
+        }
+
+        private void dataGrid_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            string cell = dataGrid.SelectedCells[0].Value.ToString(),
+            columnName = dataGrid.SelectedCells[0].OwningColumn.HeaderText;
+            if ( columnName == "MessageDesc")
+            {
+                if (cell != "")
+                    MessageBox.Show(cell);
+                else
+                {
+                    int rowIndex = dataGrid.CurrentCell.RowIndex;
+                    dataGrid.Rows[rowIndex].Cells[0].Value = "T" + dataGrid.Rows.Count;
+                }
+            }
+        }
+
+        private void Terminator_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGrid_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if ( e.ColumnIndex == 1)
+                MessageBox.Show("value changed");
+            DataGridViewRow row = dataGrid.Rows[e.RowIndex];
+            string MsgId = row.Cells[0].Value.ToString(),
+                Message = row.Cells[1].Value.ToString(),
+            sql = "DELETE FROM SystemMessage WHERE FileName = '" + FileName + "' AND MsgId = '" + MsgId + "'";
+            SqlCommand command = new SqlCommand(sql, conn);
+            command.ExecuteNonQuery();
+            sql = "INSERT INTO SystemMessage (MsgId, MessageDesc, MessageText, FileName, CreatedBy) " +
+                "VALUES ('" + MsgId + "', '" + Message + "', '" + Message + "', '" + FileName + "', 'Terminator' )";
+            command.CommandText = sql;
+            command.ExecuteNonQuery();
+
+            populateGridWithMessage(FileName);
+
+        }
+
+        private void deleteMessageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you want to delete this record?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+
+            }
+        }
+
+        private void dataGrid_CellMouseUp(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                dataGrid.Rows[e.RowIndex].Selected = true;
+                //rowIndex = e.RowIndex;
+                dataGrid.CurrentCell = dataGrid.Rows[e.RowIndex].Cells[1];
+                contextMenuStrip1.Show(dataGrid, e.Location);
+                contextMenuStrip1.Show(Cursor.Position);
             }
         }
     }

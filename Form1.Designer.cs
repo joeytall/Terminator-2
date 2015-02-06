@@ -29,11 +29,13 @@ namespace Terminator
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Terminator));
             this.btnBrowse = new System.Windows.Forms.Button();
             this.lblFolder = new System.Windows.Forms.Label();
             this.txtPath = new System.Windows.Forms.TextBox();
             this.groupFiles = new System.Windows.Forms.GroupBox();
+            this.btnExpand = new System.Windows.Forms.Button();
             this.lbExtension = new System.Windows.Forms.ListBox();
             this.txtNameExclude = new System.Windows.Forms.TextBox();
             this.cbSubfolders = new System.Windows.Forms.CheckBox();
@@ -72,8 +74,9 @@ namespace Terminator
             this.label3 = new System.Windows.Forms.Label();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.Grid = new System.Windows.Forms.DataGridView();
-            this.btnExpand = new System.Windows.Forms.Button();
             this.dataGrid = new System.Windows.Forms.DataGridView();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.deleteMessageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupFiles.SuspendLayout();
             this.groupReplace.SuspendLayout();
             this.search.SuspendLayout();
@@ -81,6 +84,7 @@ namespace Terminator
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Grid)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).BeginInit();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnBrowse
@@ -134,6 +138,16 @@ namespace Terminator
             this.groupFiles.TabIndex = 5;
             this.groupFiles.TabStop = false;
             this.groupFiles.Text = "Filter Files";
+            // 
+            // btnExpand
+            // 
+            this.btnExpand.Location = new System.Drawing.Point(447, 20);
+            this.btnExpand.Name = "btnExpand";
+            this.btnExpand.Size = new System.Drawing.Size(25, 23);
+            this.btnExpand.TabIndex = 15;
+            this.btnExpand.Text = "->";
+            this.btnExpand.UseVisualStyleBackColor = true;
+            this.btnExpand.Click += new System.EventHandler(this.expand_Click);
             // 
             // lbExtension
             // 
@@ -239,10 +253,10 @@ namespace Terminator
             this.console.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.console.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.console.ForeColor = System.Drawing.Color.Lime;
-            this.console.Location = new System.Drawing.Point(509, 365);
+            this.console.Location = new System.Drawing.Point(12, 442);
             this.console.Name = "console";
             this.console.ReadOnly = true;
-            this.console.Size = new System.Drawing.Size(354, 66);
+            this.console.Size = new System.Drawing.Size(482, 111);
             this.console.TabIndex = 7;
             this.console.Text = "";
             this.console.TextChanged += new System.EventHandler(this.console_TextChanged);
@@ -493,41 +507,46 @@ namespace Terminator
             this.Grid.Name = "Grid";
             this.Grid.ReadOnly = true;
             this.Grid.RowHeadersVisible = false;
-            this.Grid.Size = new System.Drawing.Size(354, 354);
+            this.Grid.Size = new System.Drawing.Size(299, 542);
             this.Grid.TabIndex = 10;
             this.Grid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Grid_CellContentClick);
             this.Grid.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.Grid_CellDoubleClick);
             // 
-            // btnExpand
-            // 
-            this.btnExpand.Location = new System.Drawing.Point(447, 20);
-            this.btnExpand.Name = "btnExpand";
-            this.btnExpand.Size = new System.Drawing.Size(25, 23);
-            this.btnExpand.TabIndex = 15;
-            this.btnExpand.Text = "->";
-            this.btnExpand.UseVisualStyleBackColor = true;
-            this.btnExpand.Click += new System.EventHandler(this.expand_Click);
-            // 
             // dataGrid
             // 
-            this.dataGrid.AllowUserToAddRows = false;
             this.dataGrid.AllowUserToResizeRows = false;
             this.dataGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGrid.BackgroundColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.dataGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGrid.Location = new System.Drawing.Point(881, 11);
+            this.dataGrid.Location = new System.Drawing.Point(814, 11);
             this.dataGrid.Name = "dataGrid";
-            this.dataGrid.ReadOnly = true;
             this.dataGrid.RowHeadersVisible = false;
-            this.dataGrid.Size = new System.Drawing.Size(319, 420);
+            this.dataGrid.Size = new System.Drawing.Size(319, 542);
             this.dataGrid.TabIndex = 11;
+            this.dataGrid.CellMouseUp += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGrid_CellMouseUp);
+            this.dataGrid.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGrid_CellValueChanged);
+            this.dataGrid.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.dataGrid_MouseDoubleClick);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.deleteMessageToolStripMenuItem});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(134, 26);
+            // 
+            // deleteMessageToolStripMenuItem
+            // 
+            this.deleteMessageToolStripMenuItem.Name = "deleteMessageToolStripMenuItem";
+            this.deleteMessageToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.deleteMessageToolStripMenuItem.Text = "Delete Row";
+            this.deleteMessageToolStripMenuItem.Click += new System.EventHandler(this.deleteMessageToolStripMenuItem_Click);
             // 
             // Terminator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.ClientSize = new System.Drawing.Size(1212, 438);
+            this.ClientSize = new System.Drawing.Size(974, 565);
             this.Controls.Add(this.dataGrid);
             this.Controls.Add(this.groupReplace);
             this.Controls.Add(this.console);
@@ -539,6 +558,7 @@ namespace Terminator
             this.Name = "Terminator";
             this.Text = "Terminator 1.0";
             this.TransparencyKey = System.Drawing.SystemColors.ActiveBorder;
+            this.Load += new System.EventHandler(this.Terminator_Load);
             this.groupFiles.ResumeLayout(false);
             this.groupFiles.PerformLayout();
             this.groupReplace.ResumeLayout(false);
@@ -550,6 +570,7 @@ namespace Terminator
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Grid)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGrid)).EndInit();
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -607,6 +628,8 @@ namespace Terminator
         private DataGridView Grid;
         private Button btnExpand;
         private DataGridView dataGrid;
+        private ContextMenuStrip contextMenuStrip1;
+        private ToolStripMenuItem deleteMessageToolStripMenuItem;
     }
 }
 

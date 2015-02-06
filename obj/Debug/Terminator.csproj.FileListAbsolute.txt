@@ -17,3 +17,12 @@ P:\Tero\Terminator\obj\Debug\Terminator.csprojResolveAssemblyReference.cache
 P:\Tero\Terminator\obj\Debug\Terminator.Terminator.resources
 P:\Tero\Terminator\obj\Debug\Terminator.Properties.Resources.resources
 P:\Tero\Terminator\obj\Debug\Terminator.csproj.GenerateResource.Cache
+C:\Users\joey\Documents\Terminator-2\bin\Debug\Terminator.exe.config
+C:\Users\joey\Documents\Terminator-2\obj\Debug\Terminator.exe
+C:\Users\joey\Documents\Terminator-2\obj\Debug\Terminator.pdb
+C:\Users\joey\Documents\Terminator-2\bin\Debug\Terminator.exe
+C:\Users\joey\Documents\Terminator-2\bin\Debug\Terminator.pdb
+C:\Users\joey\Documents\Terminator-2\obj\Debug\Terminator.csprojResolveAssemblyReference.cache
+C:\Users\joey\Documents\Terminator-2\obj\Debug\Terminator.Terminator.resources
+C:\Users\joey\Documents\Terminator-2\obj\Debug\Terminator.Properties.Resources.resources
+C:\Users\joey\Documents\Terminator-2\obj\Debug\Terminator.csproj.GenerateResource.Cache
